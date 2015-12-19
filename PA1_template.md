@@ -4,13 +4,15 @@
 ## Loading and preprocessing the data
 
 ```r
+# Set the working directory
 setwd("D:\\Reporducible research\\Data")
+# Load the file
 activitydata <- read.csv("activity.csv", as.is = TRUE)
 
-#Converting the date to a valid R date object.
+#Converting the date to a valid R date type.
 activitydata$date <- as.Date(activitydata$date)
 
-#Remove the NA values and store ia good data set
+#Remove the NA values and store in filledactivity data set
 filledactivity <- activitydata[complete.cases(activitydata), ]
 ```
 
@@ -53,7 +55,7 @@ round(median(stepsperday$steps))
 avgstepsperinterval <- aggregate(steps ~ interval, filledactivity, mean)
 
 
-# Plot the time series with appropriate labels and heading
+# Plot the time series
 plot(avgstepsperinterval$interval, avgstepsperinterval$steps, type='l', col=1, main="Average number of steps by Interval", xlab="Time Intervals", ylab="Average number of steps")
 ```
 
@@ -90,10 +92,11 @@ nrow(missing_value_act)
 ```
 
 ```r
-# Loop thru all the rows of activity, find the one with NA for steps.
+# Loop thru all the rows of activity.
+# Find the one with NA for steps.
 # For each identify the interval for that row
-# Then identify the avg steps for that interval in avg_steps_per_interval
-# Substitute the NA value with that value
+# Identify the avg steps for that interval in the set avgstepsperinterval
+# Substitute the NA values with that avg steps
 
 for (i in 1:nrow(activitydata)) {
     if(is.na(activitydata$steps[i])) {
@@ -102,7 +105,7 @@ for (i in 1:nrow(activitydata)) {
     }
 }
 
-# Aggregate the steps per day with the imputed values
+# Compute aggregate steps per day with the imputed values
 stepsperdayimpute <- aggregate(steps ~ date, activitydata, sum)
 
 # Draw a histogram of the value 
